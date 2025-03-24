@@ -1,0 +1,144 @@
+{
+  "users": [
+    {
+      "email": "user1@example.com",
+      "username": "UserOne",
+      "password": "password1",
+      "songs": [
+        {
+          "title": "1904",
+          "artist": "The Tallest Man on Earth",
+          "year": "2012",
+          "album": "There's No Leaving Now",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/TheTallestManOnEarth.jpg"
+        },
+        {
+          "title": "#40",
+          "artist": "Dave Matthews",
+          "year": "1999",
+          "album": "Listener Supported",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/DaveMatthews.jpg"
+        },
+        {
+          "title": "40oz to Freedom",
+          "artist": "Sublime",
+          "year": "1996",
+          "album": "40oz. to Freedom",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/Sublime.jpg"
+        }
+      ]
+    },
+    {
+      "email": "user2@example.com",
+      "username": "UserTwo",
+      "password": "password2",
+      "songs": [
+        {
+          "title": "1904",
+          "artist": "The Tallest Man on Earth",
+          "year": "2012",
+          "album": "There's No Leaving Now",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/TheTallestManOnEarth.jpg"
+        },
+        {
+          "title": "American Girl",
+          "artist": "Tom Petty",
+          "year": "1977",
+          "album": "Tom Petty and the Heartbreakers",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/TomPetty.jpg"
+        },
+        {
+          "title": "American Music",
+          "artist": "Violent Femmes",
+          "year": "1991",
+          "album": "Why Do Birds Sing?",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/ViolentFemmes.jpg"
+        }
+      ]
+    },
+    {
+      "email": "user3@example.com",
+      "username": "UserThree",
+      "password": "password3",
+      "songs": [
+        {
+          "title": "American Pie",
+          "artist": "Don McLean",
+          "year": "1972",
+          "album": "American Pie",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/DonMcLean.jpg"
+        },
+        {
+          "title": "Big Parade",
+          "artist": "The Lumineers",
+          "year": "2012",
+          "album": "The Lumineers",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/TheLumineers.jpg"
+        },
+        {
+          "title": "Carry On",
+          "artist": "fun.",
+          "year": "2012",
+          "album": "Some Nights",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/Fun.jpg"
+        }
+      ]
+    },
+    {
+      "email": "user4@example.com",
+      "username": "UserFour",
+      "password": "password4",
+      "songs": [
+        {
+          "title": "Cat's in the Cradle",
+          "artist": "Harry Chapin",
+          "year": "1974",
+          "album": "Verities & Balderdash",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/HarryChapin.jpg"
+        },
+        {
+          "title": "Changes in Latitudes, Changes in Attitudes",
+          "artist": "Jimmy Buffett",
+          "year": "1977",
+          "album": "Changes in Latitudes, Changes in Attitudes",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/JimmyBuffett.jpg"
+        },
+        {
+          "title": "Danny Boy",
+          "artist": "Johnny Cash",
+          "year": "2002",
+          "album": "American IV: The Man Comes Around",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/JohnnyCash.jpg"
+        }
+      ]
+    },
+    {
+      "email": "user5@example.com",
+      "username": "UserFive",
+      "password": "password5",
+      "songs": [
+        {
+          "title": "1904",
+          "artist": "The Tallest Man on Earth",
+          "year": "2012",
+          "album": "There's No Leaving Now",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/TheTallestManOnEarth.jpg"
+        },
+        {
+          "title": "Darkness Between the Fireflies",
+          "artist": "Mason Jennings",
+          "year": "1997",
+          "album": "Mason Jennings",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/MasonJennings.jpg"
+        },
+        {
+          "title": "Distantly in Love",
+          "artist": "Jimmy Buffett",
+          "year": "1983",
+          "album": "One Particular Harbour",
+          "img_url": "https://raw.githubusercontent.com/YingZhang2015/cc/main/JimmyBuffett.jpg"
+        }
+      ]
+    }
+  ]
+}
