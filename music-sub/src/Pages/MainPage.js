@@ -209,13 +209,15 @@ const MainPage = () => {
           </Carousel>
         )}
       </Container>
-      <Container className = "mt-4">
+      <Container className = "Search-Songs">
           <h2>Search Songs</h2>
-          <input type="text" placeholder="Title" onChange={(e) => setQuery({ ...query, title: e.target.value })} />
-          <input type="text" placeholder="Artist" onChange={(e) => setQuery({ ...query, artist: e.target.value })} />
-          <input type="text" placeholder="Year" onChange={(e) => setQuery({ ...query, year: e.target.value })} />
-          <input type="text" placeholder="Album" onChange={(e) => setQuery({ ...query, album: e.target.value })} />
-          <button onClick={handleSearch}>Search</button>
+          <div className="search-container">
+              <input type="text" placeholder="Title" onChange={(e) => setQuery({ ...query, title: e.target.value })} />
+              <input type="text" placeholder="Artist" onChange={(e) => setQuery({ ...query, artist: e.target.value })} />
+              <input type="text" placeholder="Year" onChange={(e) => setQuery({ ...query, year: e.target.value })} />
+              <input type="text" placeholder="Album" onChange={(e) => setQuery({ ...query, album: e.target.value })} />
+              <button onClick={handleSearch}>Search</button>
+          </div>
 
           {searchResults.length > 0 ? (
               <div>

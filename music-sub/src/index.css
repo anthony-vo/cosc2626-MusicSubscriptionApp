@@ -11,3 +11,53 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h2 {
+  color: white !important;
+}
+
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Space between inputs */
+  padding: 20px;
+  flex-wrap: nowrap;
+}
+
+.search-container input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid purple;
+  border-radius: 5px;
+  background: #222; /* Dark background for inputs */
+  color: white;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-container input::placeholder {
+  color: #bbb; /* Light gray placeholder text */
+}
+
+.search-container input:focus {
+  border-color: purple; /* Brighter purple on focus */
+}
+
+.search-container button {
+  width: 150px;
+  padding: 10px;
+  font-size: 16px;
+  background: purple;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-container button:hover {
+  background: #7c12ae; /* Lighter purple on hover */
+}
