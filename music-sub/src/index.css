@@ -16,6 +16,28 @@ h2 {
   color: white !important;
 }
 
+p {
+  color: white !important;
+}
+
+.card {
+  background-color: #222222 !important;
+  color: white;
+  border: 1px solid #7c12ae;
+}
+
+.card-title {
+  color: #bb33ff !important;
+}
+
+.card-text {
+  color: #dddddd;
+}
+
+.card img {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
 
 .search-container {
   display: flex;
@@ -43,8 +65,7 @@ h2 {
 }
 
 .search-container input:focus {
-  border-color: #c64dff; /* Brighter purple on focus */
-  box-shadow:0 0 7px #c64dff;
+  border-color: #ffffff; /* Brighter purple on focus */
 }
 
 .search-container button {
@@ -52,14 +73,64 @@ h2 {
   padding: 10px;
   font-size: 16px;
   background: #7c12ae;
-  border-color: #7c12ae;
   color: white;
-  border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
+  border: 0;
 }
 
 .search-container button:hover {
-  background: #c64dff; /* Lighter purple on hover */
-  border-color: #c64dff;
+  background: #6b0a93 !important; /* darker purple on hover */
+}
+
+.btn-purple {
+  background-color: #7c12ae !important;
+  border: 0 !important;
+}
+
+.btn.btn-purple:hover {
+  background: #6b0a93 !important; /* Lighter purple on hover */
+}
+
+
+.flip-card {
+  perspective: 1000px;
+  width: 100%;
+  height: 250px; /* Adjust as needed */
+}
+
+.flip-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.flip-card-front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-card-back {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  transform: rotateY(180deg);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

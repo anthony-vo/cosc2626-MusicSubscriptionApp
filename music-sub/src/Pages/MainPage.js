@@ -21,7 +21,7 @@ const MainPage = () => {
   const [query, setQuery] = useState({ title: "", artist: "", year: "", album: "" });
   const [searchResults, setSearchResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const resultsPerPage = 5;
+  const resultsPerPage = 6;
 
 
     useEffect(() => {
@@ -227,20 +227,36 @@ const MainPage = () => {
                   <Row>
                       {currentResults.map((song, index) => (
                           <Col key={index} md={4} lg={2} className="mb-3">
-                              <Card>
-                                  <Card.Img variant="top" src={song.img_url} alt={song.artist} />
-                                  <Card.Body>
-                                      <Card.Title>{song.title}</Card.Title>
-                                      <Card.Text>
-                                          <strong>Artist:</strong> {song.artist} <br />
-                                          <strong>Album:</strong> {song.album} <br />
-                                          <strong>Year:</strong> {song.year}
-                                      </Card.Text>
-                                      <Button variant="primary" onClick={() => handleSubscribe(song)}>
-                                          Subscribe
-                                      </Button>
-                                  </Card.Body>
-                              </Card>
+                              <div className="flip-card">
+                                  <div className="flip-card-inner">
+                                      {/* Front Side - Image */}
+                                      <div className="flip-card-front">
+                                          <Card.Img variant="top" src={song.img_url} alt={song.artist} />
+                                      </div>
+
+                                      {/* Back Side - Details */}
+                                      <div className="flip-card-back">
+                                          <Card.Body>
+                                              <Card.Title>{song.title}</Card.Title>
+                                              <Card.Text>
+                                                  <strong>Artist:</strong> {song.artist} <br />
+                                                  <strong>Album:</strong> {song.album} <br />
+                                                  <strong>Year:</strong> {song.year}
+                                              </Card.Text>
+                                              <Button
+                                                  className={songs.some((s) => s.title === song.title) ? "btn-danger" : "btn-purple"}
+                                                  onClick={() =>
+                                                      songs.some((s) => s.title === song.title)
+                                                          ? handleRemove(song.title)
+                                                          : handleSubscribe(song)
+                                                  }
+                                              >
+                                                  {songs.some((s) => s.title === song.title) ? "Remove" : "Subscribe"}
+                                              </Button>
+                                          </Card.Body>
+                                      </div>
+                                  </div>
+                              </div>
                           </Col>
                       ))}
                   </Row>
