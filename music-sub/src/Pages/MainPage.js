@@ -217,7 +217,7 @@ const MainPage = () => {
           <input type="text" placeholder="Album" onChange={(e) => setQuery({ ...query, album: e.target.value })} />
           <button onClick={handleSearch}>Search</button>
 
-          {searchResults.length > 0 && (
+          {searchResults.length > 0 ? (
               <div>
                   <Row>
                       {currentResults.map((song, index) => (
@@ -249,7 +249,9 @@ const MainPage = () => {
                       </Button>
                   </div>
               </div>
-          )}
+          ) : (
+              <p>No result is retrieved. Please query again</p>
+              )}
       </Container>
     </div>
   );
