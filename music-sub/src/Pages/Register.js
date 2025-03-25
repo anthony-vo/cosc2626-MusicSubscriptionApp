@@ -28,15 +28,9 @@ const Register = () => {
     }
   }, []);
 
-  const passwordChecker = (e) => {
-    e.preventDefault();
-    const password = document.getElementById("password")
+  const passwordChecker = (password) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-    if (!passwordRegex.test(password)){
-      return false;
-    }else {
-      return true;
-    }
+    return passwordRegex.test(password);
   }
 
   const handleRegister = (e) => {
@@ -48,10 +42,17 @@ const Register = () => {
     console.log(usernameExists);
     if (emailExists) {
       setError("The email already exists");
-    }else if (usernameExists === ""){
+    }else if (usernameExists){
       setError("This username already exists");
-    }else if (!passwordChecker){
-      setError("The password must be at least: \n- 8 characters long \n- at least one capital and one lower case character \n- have at least one number")
+    } else if (!passwordChecker(password)) {
+      setError(
+          <>
+            The password must have at least: <br />
+            - 8 characters <br />
+            - one uppercase and one lowercase letter <br />
+            - one number
+          </>
+      );
     }
     else {
       const newUser = {
@@ -118,7 +119,7 @@ const Register = () => {
                       id = "password"
                     />
                   </Form.Group>
-                  <div className="d-grid">
+                  <div className="d-grid search-container">
                     <Button variant="primary" type="submit" style={{backgroundColor: "#7c12ae", borderColor: "#7c12ae"}}>
                       Register
                     </Button>

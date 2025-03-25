@@ -82,7 +82,7 @@ const Login = () => {
                       required
                     />
                   </Form.Group>
-                  <div className="d-grid">
+                  <div className="d-grid search-container">
                     <Button variant="primary" type="submit" style={{backgroundColor: "#7c12ae", borderColor: "#7c12ae"}}>
                       Login
                     </Button>
