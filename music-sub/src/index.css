@@ -30,7 +30,7 @@ h2 {
   width: 300px;
   padding: 10px;
   font-size: 16px;
-  border: 2px solid purple;
+  border: 2px solid #7c12ae;
   border-radius: 5px;
   background: #222; /* Dark background for inputs */
   color: white;
@@ -43,21 +43,23 @@ h2 {
 }
 
 .search-container input:focus {
-  border-color: purple; /* Brighter purple on focus */
+  border-color: #c64dff; /* Brighter purple on focus */
+  box-shadow:0 0 7px #c64dff;
 }
 
 .search-container button {
   width: 150px;
   padding: 10px;
   font-size: 16px;
-  background: purple;
+  background: #7c12ae;
+  border-color: #7c12ae;
   color: white;
-  border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 .search-container button:hover {
-  background: #7c12ae; /* Lighter purple on hover */
+  background: #c64dff; /* Lighter purple on hover */
+  border-color: #c64dff;
 }

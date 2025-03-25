@@ -48,13 +48,16 @@ const Login = () => {
           <Navbar.Brand>My Music App</Navbar.Brand>
         </Container>
       </Navbar>
-      <Container fluid className="bg-dark bg-gradient" style={{ minHeight: "100vh" }}>
+      <Container fluid className="text-white" style={{
+        minHeight: "100vh",
+        background: "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))"
+      }}>
         <Row
           className="justify-content-center align-items-center"
           style={{ minHeight: "100vh" }}
         >
           <Col md={4}>
-            <Card className="shadow">
+            <Card className="bg-dark text-white">
               <Card.Body>
                 <Card.Title className="text-center mb-4">Login</Card.Title>
                 {error && <p className="text-danger text-center">{error}</p>}
@@ -80,7 +83,7 @@ const Login = () => {
                     />
                   </Form.Group>
                   <div className="d-grid">
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" style={{backgroundColor: "#7c12ae", borderColor: "#7c12ae"}}>
                       Login
                     </Button>
                   </div>
