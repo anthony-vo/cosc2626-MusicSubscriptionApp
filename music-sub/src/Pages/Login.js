@@ -48,7 +48,7 @@ const Login = () => {
           <Navbar.Brand>My Music App</Navbar.Brand>
         </Container>
       </Navbar>
-      <Container fluid className="bg-light" style={{ minHeight: "100vh" }}>
+      <Container fluid className="bg-dark bg-gradient" style={{ minHeight: "100vh" }}>
         <Row
           className="justify-content-center align-items-center"
           style={{ minHeight: "100vh" }}

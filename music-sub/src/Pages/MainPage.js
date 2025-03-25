@@ -89,7 +89,7 @@ const MainPage = () => {
   const totalPages = Math.ceil(searchResults.length / resultsPerPage);
 
   return (
-    <div style={{ backgroundColor: "#f2f2f2", minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh" }} className="bg-dark bg-gradient">
       {/*Custome CSS for the carousel */}
       <style>
         {`

@@ -28,14 +28,32 @@ const Register = () => {
     }
   }, []);
 
+  const passwordChecker = (e) => {
+    e.preventDefault();
+    const password = document.getElementById("password")
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    if (!passwordRegex.test(password)){
+      return false;
+    }else {
+      return true;
+    }
+  }
+
   const handleRegister = (e) => {
     e.preventDefault();
     const users = JSON.parse(localStorage.getItem("users")) || [];
     // Check if the entered email already exists.
     const emailExists = users.some((u) => u.email === email);
+    const usernameExists = users.some((user) => user.username === username);
+    console.log(usernameExists);
     if (emailExists) {
       setError("The email already exists");
-    } else {
+    }else if (usernameExists === ""){
+      setError("This username already exists");
+    }else if (!passwordChecker){
+      setError("The password must be at least: \n- 8 characters long \n- at least one capital and one lower case character \n- have at least one number")
+    }
+    else {
       const newUser = {
         email,
         username,
@@ -55,7 +73,7 @@ const Register = () => {
           <Navbar.Brand>My Music App</Navbar.Brand>
         </Container>
       </Navbar>
-      <Container fluid className="bg-light" style={{ minHeight: "100vh" }}>
+      <Container fluid className="bg-dark bg-gradient" style={{ minHeight: "100vh" }}>
         <Row
           className="justify-content-center align-items-center"
           style={{ minHeight: "100vh" }}
@@ -94,6 +112,7 @@ const Register = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      id = "password"
                     />
                   </Form.Group>
                   <div className="d-grid">
