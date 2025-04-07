@@ -39,6 +39,11 @@ p {
   border-top-right-radius: 5px;
 }
 
+.ms-auto {
+  display: flex !important;
+  justify-content: right !important;
+}
+
 .search-container {
   display: flex;
   justify-content: center;
@@ -133,4 +138,126 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+body {
+  margin: 0;
+  background-color: #111;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.main-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.sidebar .logo {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  color: #bb33ff;
+  font-weight: bold;
+}
+
+.sidebar button {
+  background: none;
+  color: white;
+  border: none;
+  text-align: left;
+  padding: 10px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  color: #bb33ff;
+}
+
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: linear-gradient(to bottom, #0a0a0a, #000000);
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  color: #bb33ff;
+}
+
+.search-section {
+  margin-bottom: 30px;
+}
+
+.recent-subs {
+  margin-top: 100px;
+}
+
+.search-results-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-results-container::-webkit-scrollbar-track {
+  background: #1c1c1c;
+}
+
+.search-results-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.search-results-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.scroll-button {
+  background-color: #191919;
+  color: white;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.scroll-button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+body, html {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.main-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.recent-subs {
+  overflow-y: auto;
 }
