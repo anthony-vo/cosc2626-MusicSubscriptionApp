@@ -55,7 +55,7 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px; /* Space between inputs */
+  gap: 15px;
   padding: 20px;
   flex-wrap: nowrap;
 }
@@ -66,18 +66,18 @@ p {
   font-size: 16px;
   border: 2px solid #7c12ae;
   border-radius: 5px;
-  background: #222; /* Dark background for inputs */
+  background: #222;
   color: white;
   outline: none;
   transition: border-color 0.3s ease;
 }
 
 .search-container input::placeholder {
-  color: #bbb; /* Light gray placeholder text */
+  color: #bbb;
 }
 
 .search-container input:focus {
-  border-color: #ffffff; /* Brighter purple on focus */
+  border-color: #ffffff;
 }
 
 .search-container button {
@@ -92,7 +92,7 @@ p {
 }
 
 .search-container button:hover {
-  background: #6b0a93 !important; /* darker purple on hover */
+  background: #6b0a93 !important;
 }
 
 .btn-purple {
@@ -101,50 +101,95 @@ p {
 }
 
 .btn.btn-purple:hover {
-  background: #6b0a93 !important; /* Lighter purple on hover */
+  background: #6b0a93 !important;
 }
 
-
-.flip-card {
-  perspective: 1000px;
-  width: 100%;
-  height: 250px; /* Adjust as needed */
-}
-
-.flip-card-inner {
-  width: 100%;
-  height: 100%;
+.morph-card {
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.6s;
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s;
 }
 
-.flip-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
+.morph-card:hover {
+  transform: scale(1.02);
 }
 
-.flip-card-front, .flip-card-back {
+.morph-card-recent-subs {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s;
+}
+
+.morph-card-recent-subs:hover {
+  transform: scale(1.02);
+}
+
+.card-img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.morph-overlay {
   position: absolute;
-  backface-visibility: hidden;
-}
-
-.flip-card-front {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.flip-card-back {
-  background: rgba(0, 0, 0, 0.8);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
   color: white;
-  transform: rotateY(180deg);
-  padding: 10px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.card-back-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-back-content h5 {
+  font-size: 18px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.card-back-content p {
+  font-size: 14px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.card-back-content button {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.morph-card:hover .morph-overlay {
+  opacity: 1;
+}
+
+.morph-card-recent-subs:hover .morph-overlay {
+  opacity: 1;
 }
 
 body {

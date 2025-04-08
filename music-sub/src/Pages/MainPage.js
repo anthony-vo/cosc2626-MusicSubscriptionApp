@@ -179,7 +179,7 @@ const MainPage = () => {
                     display: 'flex',
                     overflowX: 'scroll',
                     overflowY: 'hidden',
-                    gap: '20px',
+                    gap: '15px',
                     padding: '10px 0',
                     scrollSnapType: 'x mandatory',
                     scrollBehavior: 'smooth',
@@ -188,37 +188,33 @@ const MainPage = () => {
                     {searchResults.map((song, index) => (
                         <div key={index} style={{
                           flexShrink: 0,
-                          width: '200px',
+                          width: '250px',
                           scrollSnapAlign: 'center',
                         }}>
-                          <div className="flip-card">
-                            <div className="flip-card-inner">
-                              <div className="flip-card-front">
-                                <Card.Img variant="top" src={song.img_url} alt={song.artist} />
-                              </div>
-                              <div className="flip-card-back">
-                                <Card.Body>
-                                  <Card.Title>{song.title}</Card.Title>
-                                  <Card.Text>
-                                    <strong>Artist:</strong> {song.artist} <br />
-                                    <strong>Album:</strong> {song.album} <br />
-                                    <strong>Year:</strong> {song.year}
-                                  </Card.Text>
-                                  <Button
-                                      className={songs.some((s) => s.title === song.title) ? "btn-danger" : "btn-purple"}
-                                      onClick={() =>
-                                          songs.some((s) => s.title === song.title)
-                                              ? handleRemove(song.title)
-                                              : handleSubscribe(song)
-                                      }
-                                  >
-                                    {songs.some((s) => s.title === song.title) ? "Unsubscribe" : "Subscribe"}
-                                  </Button>
-                                </Card.Body>
+                          <div className="morph-card">
+                            <Card.Img variant="top" src={song.img_url} alt={song.artist} className="card-img" />
+                            <div className="morph-overlay">
+                              <div className="card-back-content">
+                                <h5 style={{color: "purple"}}>{song.title}</h5>
+                                <p>
+                                  <strong>Artist:</strong> {song.artist}<br />
+                                  <strong>Album:</strong> {song.album}<br />
+                                  <strong>Year:</strong> {song.year}
+                                </p>
+                                <Button
+                                    className={songs.some((s) => s.title === song.title) ? "btn-danger" : "btn-purple"}
+                                    onClick={() =>
+                                        songs.some((s) => s.title === song.title)
+                                            ? handleRemove(song.title)
+                                            : handleSubscribe(song)
+                                    }
+                                >
+                                  {songs.some((s) => s.title === song.title) ? "Unsubscribe" : "Subscribe"}
+                                </Button>
                               </div>
                             </div>
                           </div>
-                          <p style={{ marginTop: -15, marginBottom: 0, fontSize: 16 }}>{song.title}</p>
+                          <p style={{ marginTop: 5, marginBottom: 0, fontSize: 16 }}>{song.title}</p>
                         </div>
                     ))}
                   </div>
@@ -236,27 +232,32 @@ const MainPage = () => {
                   <Row>
                     {songs.slice(-6).reverse().map((song, index) => (
                         <Col key={index} md={4} lg={2} className="mb-3">
-                          <div className="flip-card">
-                            <div className="flip-card-inner">
-                              <div className="flip-card-front">
-                                <Card.Img variant="top" src={song.img_url} alt={song.artist} />
-                              </div>
-                              <div className="flip-card-back">
-                                <Card.Body>
-                                  <Card.Title>{song.title}</Card.Title>
-                                  <Card.Text>
-                                    <strong>Artist:</strong> {song.artist} <br />
-                                    <strong>Album:</strong> {song.album} <br />
-                                    <strong>Year:</strong> {song.year}
-                                  </Card.Text>
-                                  <Button variant="danger" onClick={() => handleRemove(song.title)}>
-                                    Unsubscribe
-                                  </Button>
-                                </Card.Body>
+                          <div className="morph-card-recent-subs">
+                            <Card.Img
+                                variant="top"
+                                src={song.img_url}
+                                alt={song.artist}
+                                className="card-img"
+                            />
+                            <div className="morph-overlay">
+                              <div className="card-back-content">
+                                <h5 style={{ color: "purple" }}>{song.title}</h5>
+                                <p>
+                                  <strong>Artist:</strong> {song.artist}<br />
+                                  <strong>Album:</strong> {song.album}<br />
+                                  <strong>Year:</strong> {song.year}
+                                </p>
+                                <Button
+                                    variant="danger"
+                                    onClick={() => handleRemove(song.title)}
+                                    style={{ marginTop: 'auto' }}
+                                >
+                                  Unsubscribe
+                                </Button>
                               </div>
                             </div>
                           </div>
-                          <p style={{ marginTop: -20, fontSize: 16 }}>{song.title}</p>
+                          <p style={{ marginTop: 5, fontSize: 16 }}>{song.title}</p>
                         </Col>
                     ))}
                   </Row>
