@@ -20,6 +20,13 @@ p {
   color: white !important;
 }
 
+.content-area {
+  flex: 1;
+  padding: 20px;
+  margin-left: 220px;
+  overflow-y: auto;
+}
+
 .card {
   background-color: #222222 !important;
   color: white;
@@ -192,7 +199,7 @@ body {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
-  background: linear-gradient(to bottom, #0a0a0a, #000000);
+  background: linear-gradient(to bottom, rgba(40, 40, 40, 0.9), rgba(0, 0, 0, 1));
 }
 
 .header {

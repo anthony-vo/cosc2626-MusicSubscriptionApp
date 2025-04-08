@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "react-bootstrap";
-import { FaUserCircle } from 'react-icons/fa'; // Using a random user icon
+import {Button, Container, Nav, Navbar} from "react-bootstrap";
+import {FaUser,} from 'react-icons/fa';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Components/Sidebar";
 
@@ -19,7 +19,25 @@ const Profile = () => {
         }}>
             <div className="main-layout" style={{ display: "flex" }}>
                 <Sidebar />
-                <div style={{ flex: 1, padding: "20px" }}>
+                <div className="content-area">
+                    <Navbar>
+                        <Container fluid>
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Navbar.Collapse id="basic-navbar-nav">
+                                <Nav className="ms-auto">
+                                    {currentUser && (
+                                        <Nav.Link disabled style={{ color: 'white' }}>
+                                            <FaUser style={{ marginRight: '8px' }} />
+                                            Welcome, {currentUser.username}
+                                        </Nav.Link>
+                                    )}
+                                    <Nav.Link onClick={handleLogout} style={{ color: '#9e19dc', fontWeight: 'bold' }}>
+                                        Logout
+                                    </Nav.Link>
+                                </Nav>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
                     <h2 style={{ marginTop: "50px", textAlign: "center" }}>Your Profile</h2>
                     <div className="profile-content" style={{
                         display: "flex",
@@ -28,11 +46,18 @@ const Profile = () => {
                         textAlign: "left",
                         marginTop: "100px"
                     }}>
-                        <FaUserCircle style={{
-                            fontSize: "150px",
-                            color: "white",
-                            marginRight: "30px"
-                        }} />
+                        <img
+                            src={`https://api.dicebear.com/7.x/big-smile/svg?seed=${currentUser.username}`}
+                            alt="profile"
+                            style={{
+                                borderRadius: '50%',
+                                width: '120px',
+                                height: '120px',
+                                marginRight: '30px',
+                                backgroundColor: 'white',
+                                padding: '5px'
+                            }}
+                        />
 
                         <div>
                             <h3>Welcome, {currentUser.username}</h3>

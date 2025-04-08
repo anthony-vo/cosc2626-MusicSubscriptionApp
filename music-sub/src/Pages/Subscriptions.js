@@ -53,29 +53,29 @@ const SubscriptionsPage = () => {
             minHeight: "100vh",
             background: "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))"
         }}>
-            <Navbar>
-                <Container fluid>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ms-auto">
-                            {currentUser && (
-                                <Nav.Link disabled style={{ color: 'white' }}>
-                                    <FaUser style={{ marginRight: '8px' }} />
-                                    Welcome, {currentUser.username}
-                                </Nav.Link>
-                            )}
-                            <Nav.Link onClick={handleLogout} style={{ color: '#9e19dc', fontWeight: 'bold' }}>
-                                Logout
-                            </Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
 
             <div className="main-layout" style={{ display: "flex" }}>
                 <Sidebar />
+                <div className="content-area">
+                    <Navbar>
+                        <Container fluid>
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Navbar.Collapse id="basic-navbar-nav">
+                                <Nav className="ms-auto">
+                                    {currentUser && (
+                                        <Nav.Link disabled style={{ color: 'white' }}>
+                                            <FaUser style={{ marginRight: '8px' }} />
+                                            Welcome, {currentUser.username}
+                                        </Nav.Link>
+                                    )}
+                                    <Nav.Link onClick={handleLogout} style={{ color: '#9e19dc', fontWeight: 'bold' }}>
+                                        Logout
+                                    </Nav.Link>
+                                </Nav>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
 
-                <div style={{ flex: 1 }}>
                     <Container style={{ marginTop: 0 }} className="recent-subs">
                         <h2>Your Subscriptions</h2>
                         <div style={{
@@ -118,7 +118,7 @@ const SubscriptionsPage = () => {
                             )}
                         </div>
                     </Container>
-                </div>
+            </div>
             </div>
         </div>
     );
