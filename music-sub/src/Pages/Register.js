@@ -12,6 +12,7 @@ import {
   Navbar,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { registerUser } from "../api/musicAPI.js";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
 
   // Initialize localStorage "users" if not already set.
   useEffect(() => {
@@ -33,37 +35,17 @@ const Register = () => {
     return passwordRegex.test(password);
   }
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    // Check if the entered email already exists.
-    const emailExists = users.some((u) => u.email === email);
-    const usernameExists = users.some((user) => user.username === username);
-    console.log(usernameExists);
-    if (emailExists) {
-      setError("The email already exists");
-    }else if (usernameExists){
-      setError("This username already exists");
-    } else if (!passwordChecker(password)) {
-      setError(
-          <>
-            The password must have at least: <br />
-            - 8 characters <br />
-            - one uppercase and one lowercase letter <br />
-            - one number
-          </>
-      );
-    }
-    else {
-      const newUser = {
-        email,
-        username,
-        password,
-        songs: [], // New user starts with no songs.
-      };
-      users.push(newUser);
-      localStorage.setItem("users", JSON.stringify(users));
-      navigate("/login");
+
+    try {
+      const data = await registerUser(email, password, username);
+      if (data.statusCode === 200) {
+        console.log(data);
+        navigate("/login");
+      }
+    } catch (err) {
+        setError(err.message || "An error occurred during registration. Please try again.");
     }
   };
 
