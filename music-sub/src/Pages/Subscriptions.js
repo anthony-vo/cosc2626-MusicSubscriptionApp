@@ -5,10 +5,10 @@ import { FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Components/Sidebar";
 import axios from "axios";
-import { convertSongsWithPresignedURL } from "../api/musicAPI";
+import { generatePresignedURL } from "../api/musicAPI";
 
 const BASE_API_URL =
-  "https://ziwqlob0vj.execute-api.us-east-1.amazonaws.com/Production";
+  "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
 
 const SubscriptionsPage = () => {
   const navigate = useNavigate();
@@ -21,14 +21,14 @@ const SubscriptionsPage = () => {
 
   useEffect(() => {
     axios
-      .get(
-        `${BASE_API_URL}/Task5LambdaGetUser/${encodeURIComponent(userEmail)}`
-      )
+      .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
       .then(async (res) => {
-        const user = res.data;
+        console.log("API Response:", res.data);
+        const parsedBody = JSON.parse(res.data.body);
+        const user = parsedBody.user;
         setCurrentUser(user);
         const userSubscriptions = user.songs || [];
-        const updatedSongsImage = await convertSongsWithPresignedURL;
+        const updatedSongsImage = await generatePresignedURL(userSubscriptions);
         setSongs(updatedSongsImage);
       })
       .catch((err) => {

@@ -2,8 +2,8 @@ import axios from "axios";
 
 const API_URL =
   "https://xpbtobv7s1.execute-api.us-east-1.amazonaws.com/user/music-app-login";
-const GET_IMAGE_API =
-  "https://ziwqlob0vj.execute-api.us-east-1.amazonaws.com/Production/Task5LambdaGetImage";
+const BASE_API_URL =
+  "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
 
 export const registerUser = async (email, password, user_name) => {
   try {
@@ -33,25 +33,70 @@ const buildKey = (song) => {
   return `${song.artist}-${song.album}-${song.title}`;
 };
 
-// Calling API for lambda function handling the generation of presigned URL
-export const generatePresignedURL = async (objectKey) => {
-  try {
-    const response = await axios.post(GET_IMAGE_API, { objectKey });
-    // Return from lambda is the presigned URL
-    return response.data.presignedURL;
-  } catch (error) {
-    console.error("Error in retrieving for: ", objectKey, error);
-    return objectKey;
-  }
-};
-
-// convert img_url in dynamoDB to presigned URL from S3
-export const convertSongsWithPresignedURL = async (songs) => {
-  return await Promise.all(
+export async function generatePresignedURL(songs) {
+  return Promise.all(
     songs.map(async (song) => {
       const objectKey = buildKey(song);
-      const presignedURL = await generatePresignedURL(objectKey);
-      return { ...song, img_url: presignedURL };
+      try {
+        console.log("Requesting presigned URL for objectKey:", objectKey);
+        const response = await axios.post(BASE_API_URL, {
+          type: "getImage",
+          body: JSON.stringify({ objectKey }),
+        });
+        console.log("GET IMAGE response data:", response.data);
+
+        // Check if response.data has a body property that needs parsing
+        let data = response.data;
+        if (data.body) {
+          try {
+            data = JSON.parse(data.body);
+          } catch (parseError) {
+            console.error(
+              "Error parsing response body:",
+              data.body,
+              parseError
+            );
+          }
+        }
+
+        if (data.presignedUrl) {
+          return { ...song, img_url: data.presignedUrl };
+        } else {
+          console.error("No presignedUrl found for objectKey", objectKey, data);
+          return { ...song, img_url: null };
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching presigned URL for",
+          objectKey,
+          error.response || error
+        );
+        // Set to null in case of error (or you can use a placeholder URL)
+        return { ...song, img_url: null };
+      }
     })
   );
+}
+export const searchSongs = async (title, artist, year, album) => {
+  try {
+    const response = await axios.post(API_URL, {
+      type: "searchSongs",
+      title,
+      artist,
+      year,
+      album,
+    });
+
+    const data = response.data;
+    if (data.statusCode === 200) {
+      const parsedBody = JSON.parse(data.body);
+      return parsedBody.items;
+    } else {
+      throw new Error(data.message || "Failed");
+    }
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Something went wrong."
+    );
+  }
 };
