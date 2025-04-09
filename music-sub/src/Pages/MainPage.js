@@ -11,8 +11,8 @@ import {
 } from "react-bootstrap";
 import { FaUser } from 'react-icons/fa';
 import "bootstrap/dist/css/bootstrap.min.css";
-import mockDB from "../2025a1.json";
 import Sidebar from "../Components/Sidebar";
+import {searchSongs} from "../api/musicAPI";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -46,23 +46,21 @@ const MainPage = () => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!query.title && !query.artist && !query.year && !query.album) {
       setSearchResults([]);
       return;
     }
 
-    const filteredSongs = mockDB.songs.filter((song) => {
-      return (
-          (!query.title || song.title.toLowerCase().includes(query.title.toLowerCase())) &&
-          (!query.artist || song.artist.toLowerCase().includes(query.artist.toLowerCase())) &&
-          (!query.year || song.year === query.year) &&
-          (!query.album || song.album.toLowerCase().includes(query.album.toLowerCase()))
-      );
-    });
-
-    setSearchResults(filteredSongs);
+    try {
+      const results = await searchSongs(query.title, query.artist, query.year, query.album);
+      setSearchResults(results);
+    } catch (error) {
+      console.error("Search failed:", error.message);
+    }
   };
+
+
 
   const handleSubscribe = async (song) => {
     const updatedSongs = [...songs, song];
