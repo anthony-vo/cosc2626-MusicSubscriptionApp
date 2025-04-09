@@ -3,106 +3,139 @@ import json
 
 def lambda_handler(event, context):
     # Determine the request type
-    type = event['type']
-    email = event['email']
+    request_type = event.get('type', '')
 
     # Initialize DynamoDB client
     client = boto3.resource('dynamodb')
     table = client.Table("login")
 
-    if type == "get":
+    # Reusable CORS headers
+    headers = {
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*'
+    }
+
+    # === GET: Return all login entries ===
+    if request_type == "get":
         try:
             scan_response = table.scan()
             items = scan_response.get('Items', [])
 
-            resp = {
+            return {
                 'statusCode': 200,
-                'headers': {
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'items': items})
             }
 
         except Exception as e:
-            resp = {
+            return {
                 'statusCode': 500,
-                'headers': {
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'error': str(e)})
             }
 
-    elif type == "options":
-        resp = {
+    # === OPTIONS: Preflight check ===
+    elif request_type == "options":
+        return {
             'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*'
-            },
+            'headers': headers,
             'body': json.dumps({'message': 'Options request successful'})
         }
 
-    elif type == "post":
-        try:
-            # Step 1: Check if email already exists
-            existing_user = table.get_item(Key={'email': email})
+    # === POST: Register a new user ===
+    elif request_type == "post":
+        email = event.get('email', '')
+        password = event.get('password', '')
+        username = event.get('user_name', '')
 
+        if not email or not password or not username:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({'message': 'Missing required fields'})
+            }
+
+        try:
+            existing_user = table.get_item(Key={'email': email})
             if 'Item' in existing_user:
-                # Email already exists
-                resp = {
+                return {
                     'statusCode': 400,
-                    'headers': {
-                        'Access-Control-Allow-Headers': 'Content-Type',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'message': 'Email already registered'})
                 }
-            else:
-                # Email does not exist, proceed with adding
-                new_item = {
-                    'email': email,
-                    'password': event['password'],
-                    'user_name': event['user_name'],
-                }
 
-                table.put_item(Item=new_item)
+            new_item = {
+                'email': email,
+                'password': password,
+                'user_name': username
+            }
 
-                resp = {
-                    'statusCode': 200,
-                    'headers': {
-                        'Access-Control-Allow-Headers': 'Content-Type',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': '*'
-                    },
-                    'body': json.dumps({'message': 'Item added successfully', 'item': new_item})
-                }
+            table.put_item(Item=new_item)
+
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': json.dumps({'message': 'Item added successfully', 'item': new_item})
+            }
 
         except Exception as e:
-            resp = {
+            return {
                 'statusCode': 500,
-                'headers': {
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'error': str(e)})
             }
 
+    # === SEARCH SONGS: Match based on partial fields ===
+    elif request_type == "searchSongs":
+        music_table = client.Table("music")
+
+        # Normalize inputs
+        artist = event.get('artist', '').lower()
+        title = event.get('title', '').lower()
+        album = event.get('album', '').lower()
+        year = str(event.get('year', '')).strip()
+
+        try:
+            scan_response = music_table.scan()
+            items = scan_response.get('Items', [])
+
+            # Apply filtering
+            filtered_items = []
+            for item in items:
+                item_artist = item.get('artist', '').lower()
+                item_title = item.get('title', '').lower()
+                item_album = item.get('album', '').lower()
+                item_year = str(item.get('year', '')).strip()
+
+                if artist and artist not in item_artist:
+                    continue
+                if title and title not in item_title:
+                    continue
+                if album and album not in item_album:
+                    continue
+                if year and year != item_year:
+                    continue
+
+                filtered_items.append(item)
+
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': json.dumps({'items': filtered_items})
+            }
+
+        except Exception as e:
+            return {
+                'statusCode': 500,
+                'headers': headers,
+                'body': json.dumps({'error': str(e)})
+            }
+
+    # === INVALID TYPE ===
     else:
-        resp = {
+        return {
             'statusCode': 400,
-            'headers': {
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*'
-            },
+            'headers': headers,
             'body': json.dumps({'error': 'Invalid request type'})
         }
-
-    return resp
