@@ -38,18 +38,27 @@ const SubscriptionsPage = () => {
   }, [navigate, userEmail]);
 
   const handleRemove = (songTitle, songAlbum) => {
+    if (!currentUser || !currentUser.email) {
+      console.error("No current user available. Cannot remove song.");
+      return;
+    }
     axios
-      .delete(
-        `${BASE_API_URL}/Task5LambdaRemoveSong/${encodeURIComponent(
-          currentUser.email
-        )}`,
-        {
-          data: { title: songTitle, album: songAlbum },
-        }
-      )
+      .post(BASE_API_URL, {
+        type: "removeSong",
+        id: currentUser.email,
+        body: JSON.stringify({ title: songTitle, album: songAlbum }),
+      })
       .then(async (res) => {
-        const updatedUser = res.data;
-      });
+        const parsedBody = JSON.parse(res.data.body);
+        const updatedUser = parsedBody.user;
+        const updatedSubscription = updatedUser.songs || [];
+        const updatedSongsImage = await generatePresignedURL(
+          updatedSubscription
+        );
+        setCurrentUser(updatedUser);
+        setSongs(updatedSongsImage);
+      })
+      .catch((err) => console.error("Error removing: ", err));
   };
 
   const handleLogout = () => {
@@ -77,7 +86,7 @@ const SubscriptionsPage = () => {
                   {currentUser && (
                     <Nav.Link disabled style={{ color: "white" }}>
                       <FaUser style={{ marginRight: "8px" }} />
-                      Welcome, {currentUser.username}
+                      Welcome, {currentUser.user_name}
                     </Nav.Link>
                   )}
                   <Nav.Link
@@ -134,7 +143,9 @@ const SubscriptionsPage = () => {
                                   ? "btn-danger"
                                   : "btn-purple"
                               }
-                              onClick={() => handleRemove(song.title)}
+                              onClick={() =>
+                                handleRemove(song.title, song.album)
+                              }
                             >
                               {songs.some((s) => s.title === song.title)
                                 ? "Unsubscribe"
