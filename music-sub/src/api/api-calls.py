@@ -19,14 +19,40 @@ def lambda_handler(event, context):
     # === GET: Return all login entries ===
     if request_type == "get":
         try:
-            scan_response = table.scan()
-            items = scan_response.get('Items', [])
+            email = event.get('email', '')
+            password = event.get('password', '')
 
-            return {
-                'statusCode': 200,
-                'headers': headers,
-                'body': json.dumps({'items': items})
-            }
+            if not email or not password:
+                return {
+                    'statusCode': 400,
+                    'headers': headers,
+                    'body': json.dumps({'error': 'Email and password are required'})
+                }
+
+            # Query by email
+            response = table.get_item(Key={'email': email})
+            user = response.get('Item')
+
+            if not user:
+                return {
+                    'statusCode': 400,
+                    'headers': headers,
+                    'body': json.dumps({'error': 'Email does not exist'})
+                }
+
+            if user.get('password') == password:
+                return {
+                    'user': user,
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({'message': 'Login successful'})
+                }
+            else:
+                return {
+                    'statusCode': 401,
+                    'headers': headers,
+                    'body': json.dumps({'error': 'Incorrect password'})
+                }
 
         except Exception as e:
             return {

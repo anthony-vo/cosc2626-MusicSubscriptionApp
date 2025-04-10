@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  " https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
+  "https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
 const BASE_API_URL =
   "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
 
@@ -24,6 +24,24 @@ export const registerUser = async (email, password, user_name) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.message || error.message || "Something went wrong."
+    );
+  }
+};
+
+export const loginUser = async(email, password) => {
+  try{
+    const response = await axios.post(API_URL, {type: 'get', email, password});
+
+    const data = response.data;
+    if(data.statusCode === 200){
+      return data;
+    }
+    else{
+      throw new Error(data.message || "Login failed");
+    }
+  }catch (error) {
+    throw new Error(
+        error.response?.data?.message || error.message || "Something went wrong."
     );
   }
 };
