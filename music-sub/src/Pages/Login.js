@@ -33,6 +33,7 @@ const Login = () => {
     try{
       const data = await loginUser(email, password);
       if(data.statusCode === 200){
+        localStorage.setItem("currentUser", JSON.stringify(data.user));
         navigate("/");
       }
     } catch (err) {
