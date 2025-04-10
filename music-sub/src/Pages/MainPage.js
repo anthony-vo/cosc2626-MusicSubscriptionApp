@@ -276,22 +276,24 @@ const MainPage = () => {
                               <br />
                               <strong>Year:</strong> {song.year}
                             </p>
-                            <Button
-                              className={
-                                songs.some((s) => s.title === song.title)
-                                  ? "btn-danger"
-                                  : "btn-purple"
-                              }
-                              onClick={() =>
-                                songs.some((s) => s.title === song.title)
-                                  ? handleRemove(song.title, song.album)
-                                  : handleSubscribe(song)
-                              }
-                            >
-                              {songs.some((s) => s.title === song.title)
-                                ? "Unsubscribe"
-                                : "Subscribe"}
-                            </Button>
+                            {currentUser && (
+                              <Button
+                                className={
+                                  songs.some((s) => s.title === song.title)
+                                    ? "btn-danger"
+                                    : "btn-purple"
+                                }
+                                onClick={() =>
+                                  songs.some((s) => s.title === song.title)
+                                    ? handleRemove(song.title, song.album)
+                                    : handleSubscribe(song)
+                                }
+                              >
+                                {songs.some((s) => s.title === song.title)
+                                  ? "Unsubscribe"
+                                  : "Subscribe"}
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -309,54 +311,58 @@ const MainPage = () => {
             </Container>
 
             {/* Displaying user's subscriptions */}
-            <Container className="recent-subs">
-              <h2>Your Recent Subscriptions</h2>
-              {songs.length === 0 ? (
-                <p>You don't have any subscriptions yet!</p>
-              ) : (
-                <Row>
-                  {songs
-                    .slice(-6)
-                    .reverse()
-                    .map((song, index) => (
-                      <Col key={index} md={4} lg={2} className="mb-3">
-                        <div className="morph-card-recent-subs">
-                          <Card.Img
-                            variant="top"
-                            src={song.img_url}
-                            alt={song.artist}
-                            className="card-img"
-                          />
-                          <div className="morph-overlay">
-                            <div className="card-back-content">
-                              <h5 style={{ color: "purple" }}>{song.title}</h5>
-                              <p>
-                                <strong>Artist:</strong> {song.artist}
-                                <br />
-                                <strong>Album:</strong> {song.album}
-                                <br />
-                                <strong>Year:</strong> {song.year}
-                              </p>
-                              <Button
-                                variant="danger"
-                                onClick={() =>
-                                  handleRemove(song.title, song.album)
-                                }
-                                style={{ marginTop: "auto" }}
-                              >
-                                Unsubscribe
-                              </Button>
+            {currentUser && (
+              <Container className="recent-subs">
+                <h2>Your Recent Subscriptions</h2>
+                {songs.length === 0 ? (
+                  <p>You don't have any subscriptions yet!</p>
+                ) : (
+                  <Row>
+                    {songs
+                      .slice(-6)
+                      .reverse()
+                      .map((song, index) => (
+                        <Col key={index} md={4} lg={2} className="mb-3">
+                          <div className="morph-card-recent-subs">
+                            <Card.Img
+                              variant="top"
+                              src={song.img_url}
+                              alt={song.artist}
+                              className="card-img"
+                            />
+                            <div className="morph-overlay">
+                              <div className="card-back-content">
+                                <h5 style={{ color: "purple" }}>
+                                  {song.title}
+                                </h5>
+                                <p>
+                                  <strong>Artist:</strong> {song.artist}
+                                  <br />
+                                  <strong>Album:</strong> {song.album}
+                                  <br />
+                                  <strong>Year:</strong> {song.year}
+                                </p>
+                                <Button
+                                  variant="danger"
+                                  onClick={() =>
+                                    handleRemove(song.title, song.album)
+                                  }
+                                  style={{ marginTop: "auto" }}
+                                >
+                                  Unsubscribe
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <p style={{ marginTop: 5, fontSize: 16 }}>
-                          {song.title}
-                        </p>
-                      </Col>
-                    ))}
-                </Row>
-              )}
-            </Container>
+                          <p style={{ marginTop: 5, fontSize: 16 }}>
+                            {song.title}
+                          </p>
+                        </Col>
+                      ))}
+                  </Row>
+                )}
+              </Container>
+            )}
           </div>
         </div>
       </div>
