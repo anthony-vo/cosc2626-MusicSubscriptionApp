@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Link } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Container, Nav, Card, Button, Row } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
@@ -65,6 +65,41 @@ const SubscriptionsPage = () => {
     localStorage.removeItem("currentUser");
     navigate("/login");
   };
+
+  // Conditional rendering
+  if (!currentUser) {
+    return (
+      <div
+        className="text-white"
+        style={{
+          minHeight: "100vh",
+          background:
+            "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))",
+        }}
+      >
+        <Container className="py-5 text-center">
+          <h2>Unfortunately you are not logged in</h2>
+          <p>
+            Let's{" "}
+            <Link
+              to="/login"
+              style={{ color: "#9e19dc", textDecoration: "underline" }}
+            >
+              login
+            </Link>{" "}
+            or{" "}
+            <Link
+              to="/register"
+              style={{ color: "#9e19dc", textDecoration: "underline" }}
+            >
+              register
+            </Link>{" "}
+            to view your current subscription list.
+          </p>
+        </Container>
+      </div>
+    );
+  }
 
   return (
     <div
