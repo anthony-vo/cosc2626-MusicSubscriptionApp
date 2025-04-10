@@ -30,26 +30,21 @@ const MainPage = () => {
   const BASE_API_URL =
     "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
 
-  const userEmail = "s39224062@student.rmit.edu.au";
+  const user = localStorage.getItem("currentUser");
+  const userEmail = user.email;
 
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem("currentUser"));
     axios
       .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
       .then(async (res) => {
         console.log("API Response:", res.data);
-        const parsedBody = JSON.parse(res.data.body);
-        const user = parsedBody.user;
+        // const parsedBody = JSON.parse(res.data.body);
+        // const user = parsedBody.user;
         setCurrentUser(user);
         const userSubscriptions = user.songs || [];
         const updatedSongsImage = await generatePresignedURL(userSubscriptions);
         setSongs(updatedSongsImage);
       });
-    // if (user) {
-    //   setCurrentUser(user);
-    // } else {
-    //   navigate("/login");
-    // }
   }, [navigate, userEmail]);
 
   const handleRemove = (songTitle, songAlbum) => {

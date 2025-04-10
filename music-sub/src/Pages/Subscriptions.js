@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Link } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Navbar, Container, Nav, Card, Button, Row } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,22 +10,22 @@ import { generatePresignedURL } from "../api/musicAPI";
 const BASE_API_URL =
   "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
 
-const SubscriptionsPage = () => {
+const Subscriptions = () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [songs, setSongs] = useState([]);
 
-  //Hardcoded user for testing purpose
+  const user = localStorage.getItem("currentUser");
 
-  const userEmail = "s39224062@student.rmit.edu.au";
+  const userEmail = user.email;
 
   useEffect(() => {
     axios
       .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
       .then(async (res) => {
         console.log("API Response:", res.data);
-        const parsedBody = JSON.parse(res.data.body);
-        const user = parsedBody.user;
+        // const parsedBody = JSON.parse(res.data.body);
+        // const user = parsedBody.user;
         setCurrentUser(user);
         const userSubscriptions = user.songs || [];
         const updatedSongsImage = await generatePresignedURL(userSubscriptions);
@@ -210,4 +210,4 @@ const SubscriptionsPage = () => {
   );
 };
 
-export default SubscriptionsPage;
+export default Subscriptions;
