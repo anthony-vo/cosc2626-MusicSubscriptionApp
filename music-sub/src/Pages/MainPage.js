@@ -12,7 +12,8 @@ import {
 import { FaUser } from 'react-icons/fa';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Components/Sidebar";
-import {searchSongs} from "../api/musicAPI";
+import {generatePresignedURL, searchSongs} from "../api/musicAPI";
+import axios from "axios";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -21,15 +22,31 @@ const MainPage = () => {
   const [query, setQuery] = useState({ title: "", artist: "", year: "", album: "" });
   const [searchResults, setSearchResults] = useState([]);
 
+  const BASE_API_URL =
+      "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
+
+  const userEmail = "s39224062@student.rmit.edu.au";
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
+    axios
+        .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
+        .then(async (res) => {
+          console.log("API Response:", res.data);
+          const parsedBody = JSON.parse(res.data.body);
+          const user = parsedBody.user;
+          setCurrentUser(user);
+          const userSubscriptions = user.songs || [];
+          const updatedSongsImage = await generatePresignedURL(userSubscriptions);
+          setSongs(updatedSongsImage);
+        })
     if (user) {
       setCurrentUser(user);
-      setSongs(user.songs);
     } else {
       navigate("/login");
     }
-  }, [navigate]);
+  }, [navigate, userEmail]);
+
 
   const handleRemove = (songTitle) => {
     const updatedSongs = songs.filter((song) => song.title !== songTitle);
@@ -54,7 +71,8 @@ const MainPage = () => {
 
     try {
       const results = await searchSongs(query.title, query.artist, query.year, query.album);
-      setSearchResults(results);
+      const updatedSongsImage = await generatePresignedURL(results);
+      setSearchResults(updatedSongsImage)
     } catch (error) {
       console.error("Search failed:", error.message);
     }

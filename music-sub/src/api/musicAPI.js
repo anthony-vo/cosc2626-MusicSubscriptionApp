@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://xpbtobv7s1.execute-api.us-east-1.amazonaws.com/user/music-app-login";
+  " https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
 const BASE_API_URL =
   "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
 
