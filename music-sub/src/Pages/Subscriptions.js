@@ -8,24 +8,25 @@ import axios from "axios";
 import { generatePresignedURL } from "../api/musicAPI";
 
 const BASE_API_URL =
-  "https://xtb9qbsb71.execute-api.us-east-1.amazonaws.com/Production/fetch";
+    "https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
 
 const Subscriptions = () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [songs, setSongs] = useState([]);
 
-  const user = localStorage.getItem("currentUser");
-
-  const userEmail = user.email;
+  const user1 = JSON.parse(localStorage.getItem("currentUser"));
+  const userEmail = user1.email;
+  console.log(userEmail);
 
   useEffect(() => {
     axios
       .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
       .then(async (res) => {
         console.log("API Response:", res.data);
-        // const parsedBody = JSON.parse(res.data.body);
-        // const user = parsedBody.user;
+        const parsedBody = JSON.parse(res.data.body);
+        const user = parsedBody.user;
+        console.log(user.email);
         setCurrentUser(user);
         const userSubscriptions = user.songs || [];
         const updatedSongsImage = await generatePresignedURL(userSubscriptions);
@@ -33,6 +34,7 @@ const Subscriptions = () => {
       })
       .catch((err) => {
         console.error("Error fetching data: ", err);
+        console.log(err);
         navigate("/login");
       });
   }, [navigate, userEmail]);
