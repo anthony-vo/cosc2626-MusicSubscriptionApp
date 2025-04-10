@@ -12,6 +12,7 @@ import {
   Button,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {loginUser, registerUser} from "../api/musicAPI";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,17 +28,16 @@ const Login = () => {
     }
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (user) {
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      navigate("/");
-    } else {
-      setError("Email or password is invalid");
+    try{
+      const data = await loginUser(email, password);
+      if(data.statusCode === 200){
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err.message);
+      setError(err.error || "An error occurred during login. Please try again.");
     }
   };
 

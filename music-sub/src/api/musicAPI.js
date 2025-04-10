@@ -34,10 +34,13 @@ export const loginUser = async(email, password) => {
 
     const data = response.data;
     if(data.statusCode === 200){
+      console.log(data);
       return data;
     }
     else{
-      throw new Error(data.message || "Login failed");
+      console.log(data);
+      console.log(data.body);
+      throw new Error(data.body.toString() || "Login failed");
     }
   }catch (error) {
     throw new Error(
