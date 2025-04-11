@@ -332,7 +332,7 @@ const MainPage = () => {
                     </div>
                   </>
               ) : (
-                  <p style={{marginTop: "30px"}}>No results retrieved.</p>
+                  <p style={{marginTop: "30px"}}>No result is retrieved. Please query again</p>
               )}
             </Container>
 
