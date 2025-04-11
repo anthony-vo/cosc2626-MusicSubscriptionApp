@@ -61,7 +61,8 @@ p {
 }
 
 .search-container input {
-  width: 300px;
+  width: 100%;
+  max-width: 300px; /* maintain a sensible limit */
   padding: 10px;
   font-size: 16px;
   border: 2px solid #7c12ae;
@@ -70,6 +71,14 @@ p {
   color: white;
   outline: none;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Optional: Make it full width on small screens */
+@media (max-width: 576px) {
+  .search-container input {
+    max-width: 100%;
+  }
 }
 
 .search-container input::placeholder {
@@ -123,7 +132,7 @@ p {
   position: relative;
   width: 200px;
   height: 200px;
-  overflow: hidden;
+  overflowX: hidden;
   cursor: pointer;
   border-radius: 0;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
