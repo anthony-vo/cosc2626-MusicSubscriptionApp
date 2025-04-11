@@ -206,7 +206,7 @@ const MainPage = () => {
                     onChange={(e) => setQuery({...query, artist: e.target.value})}
                 />
                 <input
-                    type="text"
+                    type="number"
                     placeholder="Year"
                     onChange={(e) => setQuery({...query, year: e.target.value})}
                 />
