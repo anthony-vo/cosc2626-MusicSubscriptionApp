@@ -23,9 +23,6 @@ def lambda_handler(event, context):
 
     try:
         usr_email = event.get('pathParameters', {}).get('userId')
-        raw_body = event.get('body')
-        body = json.loads(raw_body)
-        song = body.get('song')
         if not usr_email:
             return {
                 'statusCode': 400,
@@ -54,16 +51,24 @@ def lambda_handler(event, context):
 
         title = song.get('title')
         album = song.get('album')
+        artist = song.get('artist')  # NEW: Get artist from song object
 
-        if not title or not album:
+        if not all([title, album, artist]):  # Updated validation
             return {
                 'statusCode': 400,
                 'headers': headers,
-                'body': json.dumps({'error': 'Song title and album are required'})
+                'body': json.dumps({'error': 'Song title, album, and artist are required'})
             }
 
-        # Check if the song exists in the music table
-        song_check = music_table.get_item(Key={'title': title, 'album': album})
+        # NEW: Check if song exists using new schema
+        composite_sort_key = f"{album}#{title}"  # Format the sort key
+        song_check = music_table.get_item(
+            Key={
+                'artist': artist,
+                'album_title': composite_sort_key
+            }
+        )
+
         if 'Item' not in song_check:
             return {
                 'statusCode': 404,

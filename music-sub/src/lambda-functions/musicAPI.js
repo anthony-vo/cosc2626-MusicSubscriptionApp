@@ -97,27 +97,19 @@ export async function generatePresignedURL(songs, concurrency = 8) {
   return results;
 }
 
-
-
 export const searchSongs = async (title, artist, year, album) => {
   try {
     const response = await axios.get(`${API_URL}/searchSongs`, {
-      params: {
-        title,
-        artist,
-        year,
-        album,
-      },
+      params: { title, artist, year, album },
     });
 
     const data = response.data;
 
-    // No need to JSON.parse if API Gateway is not double-stringifying the body
+    // Handle both direct and stringified body formats
     if (data.items) {
       return data.items;
     }
 
-    // But if your Lambda is returning body as a JSON string inside the body key:
     if (data.body) {
       const parsedBody = JSON.parse(data.body);
       return parsedBody.items;
@@ -126,7 +118,7 @@ export const searchSongs = async (title, artist, year, album) => {
     throw new Error("Unexpected response format");
   } catch (error) {
     throw new Error(
-        error.response?.data?.error || error.message || "Something went wrong while searching songs."
+        error.response?.data?.error || error.message || "Search failed."
     );
   }
 };
