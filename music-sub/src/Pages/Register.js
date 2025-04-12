@@ -35,7 +35,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const data = await registerUser(email, password, username); // <- username here
+      const data = await registerUser(email, username, password);
       console.log(data);
       navigate("/login");
     } catch (err) {

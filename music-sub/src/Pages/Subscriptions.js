@@ -51,23 +51,28 @@ const Subscriptions = () => {
             });
     }, [navigate]);
 
-    const handleRemove = (songTitle, songAlbum) => {
-        if (!currentUser || !currentUser.email) return;
-        axios
-            .post(BASE_API_URL, {
-                type: "removeSong",
-                id: currentUser.email,
-                body: JSON.stringify({ title: songTitle, album: songAlbum }),
-            })
-            .then(async (res) => {
-                const parsedBody = JSON.parse(res.data.body);
-                const updatedUser = parsedBody.user;
-                const updatedSubscription = updatedUser.songs || [];
-                const updatedSongsImage = await generatePresignedURL(updatedSubscription);
-                setCurrentUser(updatedUser);
-                setSongs(updatedSongsImage);
-            })
-            .catch((err) => console.error("Error removing: ", err));
+    const handleRemove = async (songTitle, songAlbum) => {
+        if (!currentUser || !currentUser.email) {
+            console.error("No current user available. Cannot remove song.");
+            return;
+        }
+
+        try {
+            const res = await axios.delete(`${BASE_API_URL}/removeSong/${currentUser.email}`, {
+                data: {
+                    title: songTitle,
+                    album: songAlbum,
+                },
+            });
+
+            const updatedUser = res.data;
+            const updatedSubscription = updatedUser.songs || [];
+            const updatedSongsImage = await generatePresignedURL(updatedSubscription);
+            setCurrentUser(updatedUser);
+            setSongs(updatedSongsImage);
+        } catch (err) {
+            console.error("Error removing: ", err);
+        }
     };
 
     const handleLogout = () => {
