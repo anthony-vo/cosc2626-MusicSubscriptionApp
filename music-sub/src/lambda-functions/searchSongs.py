@@ -28,15 +28,29 @@ def lambda_handler(event, context):
         album = (params.get('album') or '').lower()
         year = (params.get('year') or '').lower()
 
-        # Scan music table
-        scan_response = music_table.scan()
-        items = scan_response.get('Items', [])
+        # More efficient querying with new schema
+        if artist:
+            # Query by partition key if artist specified
+            query_params = {
+                'KeyConditionExpression': 'artist = :artist',
+                'ExpressionAttributeValues': {':artist': artist}
+            }
+            response = music_table.query(**query_params)
+        else:
+            # Fall back to scan if no artist specified
+            response = music_table.scan()
+        
+        items = response.get('Items', [])
 
         def matches(song):
+            # Extract album and title from composite key if needed
+            album_title = song.get('album_title', '')
+            song_album, song_title = album_title.split('#') if '#' in album_title else ('', '')
+            
             return (
                 (not artist or artist in song.get('artist', '').lower()) and
-                (not title or title in song.get('title', '').lower()) and
-                (not album or album in song.get('album', '').lower()) and
+                (not title or (title in song_title.lower() if song_title else False)) and
+                (not album or (album in song_album.lower() if song_album else False)) and
                 (not year or year in str(song.get('year', '')).lower())
             )
 
