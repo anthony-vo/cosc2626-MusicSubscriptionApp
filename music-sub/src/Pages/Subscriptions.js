@@ -13,10 +13,10 @@ import { FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Components/Sidebar";
 import axios from "axios";
-import { generatePresignedURL } from "../api/musicAPI";
+import { generatePresignedURL } from "../lambda-functions/musicAPI";
 
 const BASE_API_URL =
-    "https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
+    "https://oc1t0cy4aj.execute-api.us-east-1.amazonaws.com/prod";
 
 const Subscriptions = () => {
     const navigate = useNavigate();
@@ -33,11 +33,12 @@ const Subscriptions = () => {
         }
 
         const userEmail = user1.email;
+
+        // Update the API call to use the /getUser/{userId} endpoint
         axios
-            .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
+            .get(`${BASE_API_URL}/getUser/${userEmail}`)
             .then(async (res) => {
-                const parsedBody = JSON.parse(res.data.body);
-                const user = parsedBody.user;
+                const user = res.data; // Assuming the response returns user directly
                 setCurrentUser(user);
                 const userSubscriptions = user.songs || [];
                 const updatedSongsImage = await generatePresignedURL(userSubscriptions);

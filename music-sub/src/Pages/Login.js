@@ -12,7 +12,7 @@ import {
   Button,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {loginUser, registerUser} from "../api/musicAPI";
+import {loginUser} from "../lambda-functions/musicAPI";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,17 +30,19 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try{
+    try {
       const data = await loginUser(email, password);
-      if(data.statusCode === 200){
-        localStorage.setItem("currentUser", JSON.stringify(data.user));
-        navigate("/");
-      }
+
+      // No need to check statusCode in data, just trust try/catch
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      navigate("/");
+
     } catch (err) {
       console.log(err.message);
-      setError(err.error || "An error occurred during login. Please try again.");
+      setError(err.message || "An error occurred during login. Please try again.");
     }
   };
+
 
   return (
     <>

@@ -12,7 +12,7 @@ import {
 import { FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Components/Sidebar";
-import { generatePresignedURL, searchSongs } from "../api/musicAPI";
+import { generatePresignedURL, searchSongs } from "../lambda-functions/musicAPI";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -32,7 +32,7 @@ const MainPage = () => {
   const [subsLoading, setSubsLoading] = useState(true);
 
   const BASE_API_URL =
-      "https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
+      "https://oc1t0cy4aj.execute-api.us-east-1.amazonaws.com/prod";
 
   const user1 = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -46,15 +46,17 @@ const MainPage = () => {
     setSubsLoading(true);
 
     axios
-        .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
+        .get(`${BASE_API_URL}/getUser/${userEmail}`)
         .then(async (res) => {
           console.log("API Response:", res.data);
-          const parsedBody = JSON.parse(res.data.body);
-          const user = parsedBody.user;
+          const user = res.data;  // no need to parse res.data.body anymore
           setCurrentUser(user);
           const userSubscriptions = user.songs || [];
           const updatedSongsImage = await generatePresignedURL(userSubscriptions);
           setSongs(updatedSongsImage);
+        })
+        .catch((err) => {
+          console.error("Error fetching user:", err);
         })
         .finally(() => {
           setSubsLoading(false);
@@ -62,69 +64,76 @@ const MainPage = () => {
   }, [navigate]);
 
 
-  const handleRemove = (songTitle, songAlbum) => {
+
+  const handleRemove = async (songTitle, songAlbum) => {
     if (!currentUser || !currentUser.email) {
       console.error("No current user available. Cannot remove song.");
       return;
     }
-    axios
-      .post(BASE_API_URL, {
-        type: "removeSong",
-        id: currentUser.email,
-        body: JSON.stringify({ title: songTitle, album: songAlbum }),
-      })
-      .then(async (res) => {
-        const parsedBody = JSON.parse(res.data.body);
-        const updatedUser = parsedBody.user;
-        const updatedSubscription = updatedUser.songs || [];
-        const updatedSongsImage = await generatePresignedURL(
-          updatedSubscription
-        );
-        setCurrentUser(updatedUser);
-        setSongs(updatedSongsImage);
-      })
-      .catch((err) => console.error("Error removing: ", err));
+
+    try {
+      const res = await axios.delete(`${BASE_API_URL}/removeSong/${currentUser.email}`, {
+        data: {
+          title: songTitle,
+          album: songAlbum,
+        },
+      });
+
+      const updatedUser = res.data;
+      const updatedSubscription = updatedUser.songs || [];
+      const updatedSongsImage = await generatePresignedURL(updatedSubscription);
+      setCurrentUser(updatedUser);
+      setSongs(updatedSongsImage);
+    } catch (err) {
+      console.error("Error removing: ", err);
+    }
   };
 
+
   const handleSearch = async () => {
-    if (!query.title && !query.artist && !query.year && !query.album) {
+    const { title, artist, year, album } = query;
+
+    // If all fields are empty, clear results and return early
+    if (!title && !artist && !year && !album) {
       setSearchResults([]);
       return;
     }
 
     try {
       setLoading(true);
-      const results = await searchSongs(
-        query.title,
-        query.artist,
-        query.year,
-        query.album
-      );
-      const updatedSongsImage = await generatePresignedURL(results);
-      setSearchResults(updatedSongsImage);
+
+      const results = await searchSongs(title, artist, year, album);
+      const resultsWithImages = await generatePresignedURL(results);
+
+      setSearchResults(resultsWithImages);
+    } catch (err) {
+      console.error("Search error:", err); // Optional: helpful for debugging
     } finally {
       setLoading(false);
     }
   };
 
   const handleSubscribe = async (song) => {
+    if (!currentUser || !currentUser.email) {
+      console.error("No current user available. Cannot subscribe to song.");
+      return;
+    }
+
     try {
-      const res = await axios.post(BASE_API_URL, {
-        type: "addSong",
-        id: currentUser.email,
-        body: JSON.stringify({ song }),
+      const res = await axios.post(`${BASE_API_URL}/addSong/${currentUser.email}`, {
+        song: song,
       });
-      // Parse the body
-      const parsedBody = JSON.parse(res.data.body);
-      const updatedUser = parsedBody.user;
-      const updatedSubscription = updatedUser.songs || [];
+
+      const parsedBody = res.data.user; // Direct user from response
+      const updatedSubscription = parsedBody.songs || [];
       const updatedSongsImage = await generatePresignedURL(updatedSubscription);
-      setCurrentUser(updatedUser);
+      setCurrentUser(parsedBody);
       setSongs(updatedSongsImage);
     } catch (err) {
       console.error("Error subscribing: ", err);
     }
   };
+
 
   const handleLogout = () => {
     localStorage.removeItem("currentUser");

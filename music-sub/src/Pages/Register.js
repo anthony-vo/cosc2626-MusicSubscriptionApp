@@ -12,7 +12,7 @@ import {
   Navbar,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { registerUser } from "../api/musicAPI.js";
+import { registerUser } from "../lambda-functions/musicAPI.js";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -30,22 +30,16 @@ const Register = () => {
     }
   }, []);
 
-  const passwordChecker = (password) => {
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-    return passwordRegex.test(password);
-  }
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const data = await registerUser(email, password, username);
-      if (data.statusCode === 200) {
-        console.log(data);
-        navigate("/login");
-      }
+      const data = await registerUser(email, password, username); // <- username here
+      console.log(data);
+      navigate("/login");
     } catch (err) {
-        setError(err.message || "An error occurred during registration. Please try again.");
+      setError(err.message || "An error occurred during registration.");
     }
   };
 

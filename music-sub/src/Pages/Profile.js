@@ -9,40 +9,30 @@ const Profile = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [songs, setSongs] = useState([]);
-    const [error, setError] = useState(null);
 
-    const BASE_API_URL =
-        "https://04456aftih.execute-api.us-east-1.amazonaws.com/fetch/fetch";
-
-    const user1 = JSON.parse(localStorage.getItem("currentUser"));
+    const BASE_API_URL = "https://oc1t0cy4aj.execute-api.us-east-1.amazonaws.com/prod/getUser";
 
     useEffect(() => {
-        if (!user1 || !user1.email) {
+        const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (!storedUser || !storedUser.email) {
             setLoading(false);
             return;
         }
 
-        const userEmail = user1.email;
-
-        axios
-            .post(BASE_API_URL, { type: "getUserSubscription", id: userEmail })
-            .then(async (res) => {
-                console.log("API Response:", res.data);
-                const parsedBody = JSON.parse(res.data.body);
-                const user = parsedBody.user;
-
+        const fetchUserData = async () => {
+            try {
+                const res = await axios.get(`${BASE_API_URL}/${storedUser.email}`);
+                const user = res.data;
                 setCurrentUser(user);
-
-                const userSubscriptions = user.songs || [];
-                setSongs(userSubscriptions);
-
+                setSongs(user.songs || []);
+            } catch (err) {
+                console.error("Error fetching profile:", err);
+            } finally {
                 setLoading(false);
-            })
-            .catch((err) => {
-                console.error("Error fetching data: ", err);
-                setError("An error occurred while fetching user data.");
-                setLoading(false);
-            });
+            }
+        };
+
+        fetchUserData();
     }, []);
 
     const handleLogout = () => {
@@ -52,14 +42,7 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div
-                className="text-white"
-                style={{
-                    minHeight: "100vh",
-                    background:
-                        "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))",
-                }}
-            >
+            <div className="text-white" style={{ minHeight: "100vh", background: "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))" }}>
                 <div className="main-layout" style={{ display: "flex" }}>
                     <Sidebar />
                     <div className="content-area" style={{ flex: 1 }}>
@@ -68,22 +51,8 @@ const Profile = () => {
                                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                                 <Navbar.Collapse id="basic-navbar-nav">
                                     <Nav className="ms-auto">
-                                        <Nav.Link
-                                            disabled
-                                            style={{
-                                                color: "white",
-                                                display: "flex",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <Spinner
-                                                animation="border"
-                                                role="status"
-                                                style={{
-                                                    marginRight: "10px",
-                                                    color: "#9e19dc",
-                                                }}
-                                            />
+                                        <Nav.Link disabled style={{ color: "white", display: "flex", alignItems: "center" }}>
+                                            <Spinner animation="border" role="status" style={{ marginRight: "10px", color: "#9e19dc" }} />
                                             <span>Loading...</span>
                                         </Nav.Link>
                                     </Nav>
@@ -91,14 +60,7 @@ const Profile = () => {
                             </Container>
                         </Navbar>
                         <div className="text-center py-5">
-                            <Spinner
-                                animation="border"
-                                role="status"
-                                style={{
-                                    marginTop: "100px",
-                                    color: "#9e19dc",
-                                }}
-                            />
+                            <Spinner animation="border" role="status" style={{ marginTop: "100px", color: "#9e19dc" }} />
                             <h2>Loading your Profile...</h2>
                         </div>
                     </div>
@@ -108,17 +70,10 @@ const Profile = () => {
     }
 
     return (
-        <div
-            className="text-white"
-            style={{
-                minHeight: "100vh",
-                background:
-                    "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))",
-            }}
-        >
+        <div className="text-white" style={{ minHeight: "100vh", background: "linear-gradient(to bottom, rgba(10, 10, 10, 0.9), rgba(0, 0, 0, 1))" }}>
             <div className="main-layout" style={{ display: "flex" }}>
                 <Sidebar />
-                <div className="content-area">
+                <div className="content-area" style={{ flex: 1 }}>
                     <Navbar>
                         <Container fluid>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -130,19 +85,12 @@ const Profile = () => {
                                             Welcome, {currentUser.user_name}
                                         </Nav.Link>
                                     ) : (
-                                        <Nav.Link
-                                            as="a"
-                                            href="/login"
-                                            style={{ color: "#9e19dc", fontWeight: "bold" }}
-                                        >
+                                        <Nav.Link as="a" href="/login" style={{ color: "#9e19dc", fontWeight: "bold" }}>
                                             Login
                                         </Nav.Link>
                                     )}
                                     {currentUser && (
-                                        <Nav.Link
-                                            onClick={handleLogout}
-                                            style={{ color: "#9e19dc", fontWeight: "bold" }}
-                                        >
+                                        <Nav.Link onClick={handleLogout} style={{ color: "#9e19dc", fontWeight: "bold" }}>
                                             Logout
                                         </Nav.Link>
                                     )}
@@ -153,19 +101,8 @@ const Profile = () => {
 
                     {currentUser ? (
                         <>
-                            <h2 style={{ marginTop: "50px", textAlign: "center" }}>
-                                Your Profile
-                            </h2>
-                            <div
-                                className="profile-content"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    textAlign: "left",
-                                    marginTop: "100px",
-                                }}
-                            >
+                            <h2 style={{ marginTop: "50px", textAlign: "center" }}>Your Profile</h2>
+                            <div className="profile-content" style={{ display: "flex", alignItems: "center", justifyContent: "center", textAlign: "left", marginTop: "100px" }}>
                                 <img
                                     src={`https://api.dicebear.com/7.x/big-smile/svg?seed=${currentUser.user_name}`}
                                     alt="profile"
@@ -203,17 +140,11 @@ const Profile = () => {
                             <h2>Unfortunately you are not logged in</h2>
                             <p>
                                 Let's{" "}
-                                <a
-                                    href="/login"
-                                    style={{ color: "#9e19dc", textDecoration: "underline" }}
-                                >
+                                <a href="/login" style={{ color: "#9e19dc", textDecoration: "underline" }}>
                                     login
                                 </a>{" "}
                                 or{" "}
-                                <a
-                                    href="/register"
-                                    style={{ color: "#9e19dc", textDecoration: "underline" }}
-                                >
+                                <a href="/register" style={{ color: "#9e19dc", textDecoration: "underline" }}>
                                     register
                                 </a>{" "}
                                 to view your profile.
