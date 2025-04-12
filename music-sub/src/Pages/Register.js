@@ -1,7 +1,6 @@
 // RegisterPage.js
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import mockDB from "../mockDB.json";
 import {
   Container,
   Row,
@@ -20,15 +19,6 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-
-  // Initialize localStorage "users" if not already set.
-  useEffect(() => {
-    const storedUsers = localStorage.getItem("users");
-    if (!storedUsers) {
-      localStorage.setItem("users", JSON.stringify(mockDB.users));
-    }
-  }, []);
 
 
   const handleRegister = async (e) => {
