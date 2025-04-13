@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useNavigate} from "react-router-dom";
 import { Button, Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -6,6 +7,7 @@ import Sidebar from "../Components/Sidebar";
 import axios from "axios";
 
 const Profile = () => {
+    const navigate = useNavigate()
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [songs, setSongs] = useState([]);
@@ -37,7 +39,7 @@ const Profile = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("currentUser");
-        window.location.href = "/login";
+        navigate("/login");
     };
 
     if (loading) {
